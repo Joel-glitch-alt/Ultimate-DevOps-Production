@@ -20,18 +20,38 @@ pipeline{
             }            
         }
 
-        stage("Build application"){
-            steps{
-                sh "mvn clean package"
-            }
-        }
+        // stage("Build application"){
+        //     steps{
+        //         sh "mvn clean package"
+        //     }
+        // }
 
-        stage("Test application"){
-            steps{
-                sh "mvn test"
-            }            
-        }
-        
+        // stage("Test application"){
+        //     steps{
+        //         sh "mvn test"
+        //     }            
+        // }
+        stage("Build application") {
+           steps {
+               sh '''
+                  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                  export PATH=$JAVA_HOME/bin:$PATH
+                  java -version
+                  mvn clean package
+                  '''
+          }
+    }
+
+         stage("Test application") {
+        steps {
+               sh '''
+                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                export PATH=$JAVA_HOME/bin:$PATH
+                mvn test
+              '''
+           }
+     }
+    
     }
     
 }
