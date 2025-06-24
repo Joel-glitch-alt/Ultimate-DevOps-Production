@@ -20,17 +20,31 @@ pipeline{
             }            
         }
 
+        // stage("Build application"){
+        //     steps{
+        //         sh "mvn clean package"
+        //     }
+        // }
         stage("Build application"){
             steps{
-                sh "mvn clean package"
-            }
+        dir('your-project-subdirectory') {
+            sh "mvn clean package"
         }
-
+    }
+}
         stage("Test application"){
-            steps{
-                sh "mvn test"
-            }            
+    steps{
+        dir('your-project-subdirectory') {
+            sh "mvn test"
         }
+    }            
+}
+
+        // stage("Test application"){
+        //     steps{
+        //         sh "mvn test"
+        //     }            
+        // }
     //     stage("Build application") {
     //        steps {
     //            sh '''
