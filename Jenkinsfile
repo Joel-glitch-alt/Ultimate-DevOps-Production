@@ -1,10 +1,22 @@
 pipeline{
     agent any
-    
+
+    tools{
+        jdk "Java17"
+        maven "MAVEN3"
+    }
+
     stages{
-        stage("A"){
+        stage("Clean up workspace"){
             steps{
-                echo "========executing A========"
+                cleanWs()
+            }
+            
+        }
+
+        stage("Checkout code from SCM"){
+            steps{
+                checkout scm
             }
             
         }
