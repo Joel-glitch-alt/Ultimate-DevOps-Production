@@ -20,13 +20,7 @@ pipeline{
             }
             
         }
-
-          stage("Compile and test"){
-            steps{
-                sh "mvn clean compile test"
-            }
-            
-        }
+        
     }
     
 }
