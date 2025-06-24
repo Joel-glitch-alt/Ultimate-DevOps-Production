@@ -17,8 +17,19 @@ pipeline{
         stage("Checkout code from SCM"){
             steps{
                 checkout scm
+            }            
+        }
+
+        stage("Build application"){
+            steps{
+                sh "mvn clean package -DskipTests"
             }
-            
+        }
+
+        stage("Test application"){
+            steps{
+                sh "mvn test"
+            }            
         }
         
     }
