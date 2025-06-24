@@ -20,52 +20,18 @@ pipeline{
             }            
         }
 
-        // stage("Build application"){
-        //     steps{
-        //         sh "mvn clean package"
-        //     }
-        // }
         stage("Build application"){
-            steps{
-        dir('your-project-subdirectory') {
-            sh "mvn clean package"
-        }
+    steps{
+        sh "mvn clean package"  // Remove the dir() wrapper
     }
 }
-        stage("Test application"){
+
+stage("Test application"){
     steps{
-        dir('your-project-subdirectory') {
-            sh "mvn test"
-        }
+        sh "mvn test"  // Remove the dir() wrapper
     }            
 }
-
-        // stage("Test application"){
-        //     steps{
-        //         sh "mvn test"
-        //     }            
-        // }
-    //     stage("Build application") {
-    //        steps {
-    //            sh '''
-    //             //   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    //             //   export PATH=$JAVA_HOME/bin:$PATH
-    //             //   java -version
-    //               mvn clean package
-    //               '''
-    //       }
-    // }
-
-    //      stage("Test application") {
-    //     steps {
-    //            sh '''
-    //             export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    //             export PATH=$JAVA_HOME/bin:$PATH
-    //             mvn test
-    //           '''
-    //        }
-    //  }
-    
+         
     }
     
 }
