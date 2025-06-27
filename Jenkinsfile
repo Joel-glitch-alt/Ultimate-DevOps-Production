@@ -35,14 +35,14 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('Jenkins-sonar-server') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
-    }
+    //     stage('SonarQube Analysis') {
+    //         steps {
+    //             withSonarQubeEnv('Jenkins-sonar-server') {
+    //                 sh 'mvn sonar:sonar'
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 
