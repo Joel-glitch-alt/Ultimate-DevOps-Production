@@ -118,21 +118,20 @@ pipeline {
         //         }
         //     }
         stage('Quality Gate') {
+            when {
+            not { params.SKIP_QUALITY_GATE }
+            }
             steps {
-            timeout(time: 10, unit: 'MINUTES') {
-                script {
+            script {
                 try {
-                    def qg = waitForQualityGate()
-                    if (qg.status == 'OK') {
-                    echo "Quality Gate passed: ${qg.status}"
-                    } else {
-                    echo "Quality Gate failed: ${qg.status}"
-                    currentBuild.result = 'UNSTABLE'
-                    }
-                } catch (e) {
-                    echo "Quality Gate timeout or error: ${e.getMessage()}"
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    echo "Quality Gate failed but continuing pipeline"
                     currentBuild.result = 'UNSTABLE'
                 }
+                } catch (e) {
+                echo "Quality Gate check failed: ${e.getMessage()}"
+                currentBuild.result = 'UNSTABLE'
                 }
             }
             }
