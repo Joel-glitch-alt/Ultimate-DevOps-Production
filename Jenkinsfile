@@ -6,33 +6,36 @@ pipeline {
         maven 'MAVEN3'
     }
 
+    environment {
+        SONARQUBE = 'Jenkins-sonar-server'
+    }
+
     stages {
-        stage('Clean up workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
         }
 
-        stage('Checkout code from SCM') {
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build application') {
+        stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
 
-        stage('Test application') {
+        stage('Test') {
             steps {
                 sh 'mvn test'
             }
         }
 
-        // Added SonarQube Analysis
-         stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Jenkins-sonar-server') {
                     sh 'mvn sonar:sonar'
@@ -41,6 +44,7 @@ pipeline {
         }
     }
 }
+
 
 
 // pipeline {
