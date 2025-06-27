@@ -62,7 +62,20 @@ pipeline {
         //             }
         //         }
         //     }
-       
+            
+            post {
+            always {
+                echo 'Hello! Pipeline completed.'
+                echo "Check your SonarQube dashboard at: http://68.154.50.4:9500"
+                echo 'Your Hello World project should now be visible in SonarQube!'
+            }
+            success {
+                echo 'Hello! Pipeline succeeded! 🎉'
+            }
+            failure {
+                echo 'Hello! Pipeline failed, but we tried our best! 😊'
+            }
+            }    
     }
 }
 
