@@ -8,9 +8,9 @@ pipeline {
 
     environment {
         SONARQUBE = 'Jenkins-sonar-server'
-        DOCKER_USERNAME = 'addition1905'
-        DOCKER_IMAGE = 'addition1905/java'
-        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        //DOCKER_USERNAME = 'addition1905'
+       // DOCKER_IMAGE = 'addition1905/java'
+       // DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -46,22 +46,22 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {
-                script {
-                    // Build Docker image
-                    def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+        // stage('Docker Build & Push') {
+        //     steps {
+        //         script {
+        //             // Build Docker image
+        //             def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                     
-                    // Push to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        img.push("${DOCKER_TAG}")
-                        img.push("latest")
-                    }
+        //             // Push to Docker Hub
+        //             docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+        //                 img.push("${DOCKER_TAG}")
+        //                 img.push("latest")
+        //             }
                     
-                    echo "✅ Docker image pushed successfully"
-                }
-            }
-        }
+        //             echo "✅ Docker image pushed successfully"
+        //         }
+        //     }
+        // }
         
     }
 
