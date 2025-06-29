@@ -44,9 +44,10 @@ USER appuser
 ENV JAVA_OPTS="-Xmx128m -Xms64m -XX:+UseG1GC -XX:+UseContainerSupport"
 
 # Add labels for better container management
-LABEL maintainer="Jenkins CI/CD Demo"
-LABEL description="HelloJenkins Java Console Application"
+LABEL maintainer="addition1905"
+LABEL description="Java Console Application"
 LABEL version="1.0"
+LABEL repository="addition1905/java"
 
 # Run the HelloJenkins application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -cp hello-jenkins.jar com.jenkins.HelloJenkins"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar hello-jenkins.jar"]
