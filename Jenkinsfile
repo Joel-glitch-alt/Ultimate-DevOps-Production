@@ -46,22 +46,39 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {
-                script {
-                    // Build Docker image
-                    def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+        // stage('Docker Build & Push') {
+        //     steps {
+        //         script {
+        //             // Build Docker image
+        //             def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                     
-                    // Push to Docker Hub
+        //             // Push to Docker Hub
+        //             docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+        //                 img.push("${DOCKER_TAG}")
+        //                 img.push("latest")
+        //             }
+                    
+        //             echo "✅ Docker image pushed successfully"
+        //         }
+        //     }
+        // }
+
+        stage('Docker Build & Push') {
+         steps {
+        retry(3) {
+            timeout(time: 10, unit: 'MINUTES') {
+                script {
+                    def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         img.push("${DOCKER_TAG}")
                         img.push("latest")
                     }
-                    
                     echo "✅ Docker image pushed successfully"
                 }
             }
         }
+    }
+}
     } // <- This closing brace was missing!
 
     post {
