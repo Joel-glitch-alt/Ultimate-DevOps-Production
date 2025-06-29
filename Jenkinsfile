@@ -1,43 +1,43 @@
 pipeline {
     agent any
-
+    
     tools {
         jdk 'Java21'
         maven 'MAVEN3'
     }
-
+    
     environment {
         SONARQUBE = 'Jenkins-sonar-server'
         DOCKER_USERNAME = 'addition1905'
         DOCKER_IMAGE = 'addition1905/java'
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
-
+    
     stages {
         stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
         }
-
+        
         stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
-
+        
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
-
+        
         stage('Test') {
             steps {
                 sh 'mvn test'
             }
         }
-
+        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Jenkins-sonar-server') {
@@ -45,42 +45,25 @@ pipeline {
                 }
             }
         }
-
-        // stage('Docker Build & Push') {
-        //     steps {
-        //         script {
-        //             // Build Docker image
-        //             def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                    
-        //             // Push to Docker Hub
-        //             docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-        //                 img.push("${DOCKER_TAG}")
-        //                 img.push("latest")
-        //             }
-                    
-        //             echo "✅ Docker image pushed successfully"
-        //         }
-        //     }
-        // }
-
+        
         stage('Docker Build & Push') {
-         steps {
-        retry(3) {
-            timeout(time: 10, unit: 'MINUTES') {
-                script {
-                    def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        img.push("${DOCKER_TAG}")
-                        img.push("latest")
+            steps {
+                retry(3) {
+                    timeout(time: 10, unit: 'MINUTES') {
+                        script {
+                            def img = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                                img.push("${DOCKER_TAG}")
+                                img.push("latest")
+                            }
+                            echo "✅ Docker image pushed successfully"
+                        }
                     }
-                    echo "✅ Docker image pushed successfully"
                 }
             }
         }
     }
-}
-    } // <- This closing brace was missing!
-
+    
     post {
         always {
             echo 'Hello! Pipeline completed.'

@@ -4,7 +4,7 @@ package com.jenkins;
 public class HelloJenkins {
 
     public static void main(String[] args) {
-        System.out.println("Hello, Jenkins CI/CD!");
+        System.out.println("Ultimate DevOps CI/CD and DevSecops!");
         HelloJenkins hello = new HelloJenkins();
 
         // Call greeting methods
