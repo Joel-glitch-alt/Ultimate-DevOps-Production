@@ -80,19 +80,13 @@ pipeline {
         //   }
         //  }
         // }
-        stage('Deploy') {
-  steps {
-    script {
-      if (params.ENV == 'dev') {
-        sh './deploy/dev/deploy.sh'
-      } else if (params.ENV == 'staging') {
-        sh './deploy/staging/deploy.sh'
-      } else {
-        sh './deploy/production/deploy.sh'
-      }
-    }
-  }
-}
+                stage('Deploy') {
+                           steps {
+                           script {
+                           sh "ENV=${params.ENV} ./deploy.sh"
+                }
+             }
+         }
       }
     
     post {
