@@ -5,23 +5,7 @@ A simple Java console application built with Maven and Java 21, designed to demo
 ---
 
 ## 📦 Project Structure
-
-├── build.sh # Local build and test script
-├── deploy.sh # Docker-based deploy script
-├── Dockerfile # Multi-stage Dockerfile (build + runtime)
-├── Jenkinsfile # Declarative pipeline for Jenkins CI/CD
-├── k8s/
-│ ├── deployment.yaml # Kubernetes Deployment spec
-│ └── service.yaml # Kubernetes Service spec
-├── trivy-report/ # Trivy output folder (optional)
-├── main.java # Java application file
-├── mainTest.java # JUnit test file
-├── pom.xml # Maven build file
-└── README.md # This file
-
-
 ---
-
 ## 💡 Features
 
 - ✅ **CI/CD Pipeline** with Jenkins
@@ -53,5 +37,17 @@ A simple Java console application built with Maven and Java 21, designed to demo
 ```bash
 chmod +x build.sh
 ./build.sh
+
+java -jar target/hello-jenkins.jar
+
+🐳 Docker Build & Push
+docker build -t yourdockerhub/java:latest .
+docker push yourdockerhub/java:latest
+
+🔐 Trivy Security Scan
+Install Trivy:
+https://aquasecurity.github.io/trivy/v0.18.3/installation/
+Run scan:
+trivy image yourdockerhub/java:latest --output trivy-report/report.txt
 
 
