@@ -12,6 +12,10 @@ pipeline {
         DOCKER_IMAGE = 'addition1905/java'
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
+
+     parameters {
+    choice(name: 'ENV', choices: ['dev', 'staging', 'production'], description: 'Choose environment')
+    }
     
     stages {
         stage('Clean Workspace') {
@@ -62,7 +66,34 @@ pipeline {
                 }
             }
         }
+        //
+        // stage('Deploy') {
+        //      steps {
+        //      script {
+        //   if (params.ENV == 'dev') {
+        //     sh 'kubectl apply -f k8s/dev/deployment.yml'
+        //    } else if (params.ENV == 'staging') {
+        //     sh 'kubectl apply -f k8s/staging/deployment.yml'
+        //    } else {
+        //     sh 'kubectl apply -f k8s/production/deployment.yml'
+        //     }
+        //   }
+        //  }
+        // }
+        stage('Deploy') {
+  steps {
+    script {
+      if (params.ENV == 'dev') {
+        sh './deploy/dev/deploy.sh'
+      } else if (params.ENV == 'staging') {
+        sh './deploy/staging/deploy.sh'
+      } else {
+        sh './deploy/production/deploy.sh'
+      }
     }
+  }
+}
+      }
     
     post {
         always {
