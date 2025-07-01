@@ -80,13 +80,14 @@ pipeline {
         //   }
         //  }
         // }
-                stage('Deploy') {
-                           steps {
-                           script {
-                           sh "ENV=${params.ENV} ./deploy.sh"
+               stage('Deploy') {
+                  steps {
+                    script {
+                    sh "ENV=${params.ENV} BUILD_NUMBER=${env.BUILD_NUMBER} ./deploy.sh"
                 }
-             }
+            }
          }
+
       }
     
     post {
