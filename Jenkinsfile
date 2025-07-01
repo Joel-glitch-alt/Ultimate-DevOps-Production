@@ -84,7 +84,7 @@ pipeline {
             echo 'Hello! Pipeline succeeded! 🎉'
         }
         failure {
-            echo 'Hello! Pipeline failed, but we tried our best! 😊'
+            echo 'Hello! Pipeline failed, but you tried our best! 😊'
         }
     }
 }
