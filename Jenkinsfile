@@ -81,7 +81,7 @@ pipeline {
             echo 'Your Hello World project should now be visible in SonarQube!'
         }
         success {
-            echo 'Hello! Pipeline succeeded! 🎉'
+            echo 'Helo! Pipeline succeeded! 🎉'
         }
         failure {
             echo 'Hello! Pipeline failed, but you tried our best! 😊'
