@@ -50,4 +50,15 @@ https://aquasecurity.github.io/trivy/v0.18.3/installation/
 Run scan:
 trivy image yourdockerhub/java:latest --output trivy-report/report.txt
 
+☸️ Kubernetes Deployment
+Be sure to update image in the YAMLs to your Docker Hub tag.
+
+Apply:
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+
+📊 SonarQube
+To run static analysis:
+mvn verify sonar:sonar -P sonar
+
 
