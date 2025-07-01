@@ -66,30 +66,14 @@ pipeline {
                 }
             }
         }
-        //
-        // stage('Deploy') {
-        //      steps {
-        //      script {
-        //   if (params.ENV == 'dev') {
-        //     sh 'kubectl apply -f k8s/dev/deployment.yml'
-        //    } else if (params.ENV == 'staging') {
-        //     sh 'kubectl apply -f k8s/staging/deployment.yml'
-        //    } else {
-        //     sh 'kubectl apply -f k8s/production/deployment.yml'
-        //     }
-        //   }
-        //  }
-        // }
-               stage('Deploy') {
-                  steps {
-                    script {
-                    sh "ENV=${params.ENV} BUILD_NUMBER=${env.BUILD_NUMBER} ./deploy.sh"
-                }
+        stage('Deploy') {
+            steps {
+            script {
+                sh "ENV=${params.ENV} BUILD_NUMBER=${env.BUILD_NUMBER} ./deploy.sh"
             }
-         }
-
-      }
-    
+            }
+        }
+    }
     post {
         always {
             echo 'Hello! Pipeline completed.'
