@@ -68,46 +68,46 @@ pipeline {
         }
 
        
-              stage('Security Scan - Trivy') {
-                      steps {
-                       script {
-                         sh '''
-                      echo "🔍 Starting Trivy vulnerability scan using Docker..."
+        //       stage('Security Scan - Trivy') {
+        //               steps {
+        //                script {
+        //                  sh '''
+        //               echo "🔍 Starting Trivy vulnerability scan using Docker..."
 
-                      docker run --rm \
-                      -v /var/run/docker.sock:/var/run/docker.sock \
-                      aquasec/trivy:latest image \
-                    --exit-code 1 \
-                    --severity CRITICAL,HIGH \
-                    addition1905/java:${BUILD_NUMBER}
-                   '''
-                 }
-             }
-          }
+        //               docker run --rm \
+        //               -v /var/run/docker.sock:/var/run/docker.sock \
+        //               aquasec/trivy:latest image \
+        //             --exit-code 1 \
+        //             --severity CRITICAL,HIGH \
+        //             addition1905/java:${BUILD_NUMBER}
+        //            '''
+        //          }
+        //      }
+        //   }
 
-          //////////////
-//            stage('Trivy Docker Image Scan') {
-//       steps {
-//         script {
-//           // Scan without failing the build, but report issues
-//           def dockerScanResult = sh(script: "trivy image --severity HIGH,CRITICAL --format table ${DOCKER_IMAGE}", returnStatus: true)
-//           if (dockerScanResult != 0) {
-//             currentBuild.result = 'UNSTABLE'
-//             echo "Security vulnerabilities found in Docker image scan."
-//             // Generate detailed report
-//             sh "trivy image --severity HIGH,CRITICAL --format json --output trivy-docker-report.json ${DOCKER_IMAGE}"
-//           }
-//         }
-//       }
-//       post {
-//         always {
-//           // Archive the scan results
-//           archiveArtifacts artifacts: 'trivy-docker-report.json', allowEmptyArchive: true
-//         }
-//       }
-//     }
-//   }
-//////////////////////
+
+           stage('Security Scan - Trivy') {
+  steps {
+    script {
+      sh '''
+        echo "🔍 Starting Trivy vulnerability scan using Docker..."
+
+        mkdir -p trivy-report
+
+        docker run --rm \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v $(pwd)/trivy-report:/root/reports \
+          aquasec/trivy:latest image \
+          --exit-code 0 \
+          --format html \
+          --output /root/reports/report.html \
+          --severity CRITICAL,HIGH \
+          addition1905/java:${BUILD_NUMBER}
+      '''
+    }
+  }
+}
+
 
 
         //
