@@ -68,18 +68,18 @@ pipeline {
         }
 
         //Adding Trivy 
-            stage('Security Scan - Trivy') {
-                 steps {
-                 script {
-                        sh '''
-                            echo "🔍 Starting Trivy vulnerability scan..."
+        //     stage('Security Scan - Trivy') {
+        //          steps {
+        //          script {
+        //                 sh '''
+        //                     echo "🔍 Starting Trivy vulnerability scan..."
 
-                        # Run Trivy scan on the built Docker image
-                      trivy image --exit-code 1 --severity CRITICAL,HIGH addition1905/java:${BUILD_NUMBER}
-                       '''
-                }
-             }
-        }
+        //                 # Run Trivy scan on the built Docker image
+        //               trivy image --exit-code 1 --severity CRITICAL,HIGH addition1905/java:${BUILD_NUMBER}
+        //                '''
+        //         }
+        //      }
+        // }
 //               stage('Security Scan - Trivy') {
 //                       steps {
 //                        script {
