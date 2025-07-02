@@ -218,27 +218,51 @@ pipeline {
             }
         }
 
-        stage('Security Scan - Trivy') {
-            steps {
-                script {
-                    sh '''
-                        echo "🔍 Starting Trivy vulnerability scan using Docker..."
+        // stage('Security Scan - Trivy') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 echo "🔍 Starting Trivy vulnerability scan using Docker..."
 
-                        mkdir -p trivy-report
+        //                 mkdir -p trivy-report
 
-                        docker run --rm \
-                          -v /var/run/docker.sock:/var/run/docker.sock \
-                          -v $(pwd)/trivy-report:/root/reports \
-                          aquasec/trivy:latest image \
-                          --exit-code 0 \
-                          --format html \
-                          --output /root/reports/report.html \
-                          --severity CRITICAL,HIGH \
-                          addition1905/java:${BUILD_NUMBER}
-                    '''
-                }
-            }
+        //                 docker run --rm \
+        //                   -v /var/run/docker.sock:/var/run/docker.sock \
+        //                   -v $(pwd)/trivy-report:/root/reports \
+        //                   aquasec/trivy:latest image \
+        //                   --exit-code 0 \
+        //                   --format html \
+        //                   --output /root/reports/report.html \
+        //                   --severity CRITICAL,HIGH \
+        //                   addition1905/java:${BUILD_NUMBER}
+        //             '''
+        //         }
+        //     }
+        // }
+
+                 stage('Security Scan - Trivy') {
+    steps {
+        script {
+            sh '''
+                echo "🔍 Starting Trivy vulnerability scan using Docker..."
+
+                mkdir -p trivy-report
+
+                docker run --rm \
+                  -v /var/run/docker.sock:/var/run/docker.sock \
+                  -v $(pwd)/trivy-report:/root/reports \
+                  aquasec/trivy:latest image \
+                  --exit-code 0 \
+                  --format template \
+                  --template "@contrib/html.tpl" \
+                  --output /root/reports/report.html \
+                  --severity CRITICAL,HIGH \
+                  addition1905/java:${BUILD_NUMBER}
+            '''
         }
+    }
+}
+
 
         stage('Deploy') {
             steps {
