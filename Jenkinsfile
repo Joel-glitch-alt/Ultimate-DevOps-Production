@@ -76,7 +76,7 @@ pipeline {
 
                             mkdir -p trivy-report
 
-                            # Option 1: Using Docker with increased timeout and cache volume
+                            # Run Trivy scan with proper database handling
                             docker run --rm \
                               -v /var/run/docker.sock:/var/run/docker.sock \
                               -v $(pwd)/trivy-report:/root/reports \
@@ -88,7 +88,6 @@ pipeline {
                               --template "@contrib/html.tpl" \
                               --output /root/reports/report.html \
                               --severity CRITICAL,HIGH \
-                              --skip-java-db-update \
                               ${DOCKER_IMAGE}:${BUILD_NUMBER}
                         '''
                     }
