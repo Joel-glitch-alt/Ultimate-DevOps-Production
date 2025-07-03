@@ -110,22 +110,56 @@ pipeline {
             echo "Check your SonarQube dashboard at: http://localhost:9000/"
             archiveArtifacts artifacts: 'trivy-report/report.html', fingerprint: true, allowEmptyArchive: true
         }
+        // success {
+        //     echo 'Hello! Pipeline succeeded! 🎉'
+        //     script {
+        //         if (fileExists('trivy-report/report.html')) {
+        //             publishHTML(target: [
+        //                 reportDir: 'trivy-report',
+        //                 reportFiles: 'report.html',
+        //                 reportName: 'Trivy Vulnerability Report',
+        //                 keepAll: true,
+        //                 alwaysLinkToLastBuild: true
+        //             ])
+        //         } else {
+        //             echo "⚠️ Trivy HTML report not found, skipping publish."
+        //         }
+        //     }
+        // }
         success {
-            echo 'Hello! Pipeline succeeded! 🎉'
-            script {
-                if (fileExists('trivy-report/report.html')) {
-                    publishHTML(target: [
-                        reportDir: 'trivy-report',
-                        reportFiles: 'report.html',
-                        reportName: 'Trivy Vulnerability Report',
-                        keepAll: true,
-                        alwaysLinkToLastBuild: true
-                    ])
-                } else {
-                    echo "⚠️ Trivy HTML report not found, skipping publish."
-                }
-            }
+                echo '✅ Pipeline succeeded! 🎉'
+
+                    script {
+        // 1. Publish the Trivy report (same as before)
+                     if (fileExists('trivy-report/report.html')) {
+                     publishHTML(target: [
+                     reportDir: 'trivy-report',
+                     reportFiles: 'report.html',
+                     reportName: 'Trivy Vulnerability Report',
+                     keepAll: true,
+                     alwaysLinkToLastBuild: true
+            ])
+        } else {
+            echo "⚠️ Trivy HTML report not found, skipping publish."
         }
+
+        // 2. Get Git committer email
+        def authorEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
+
+        // 3. Email the committer
+        emailext(
+            to: "${authorEmail}",
+            subject: "✅ SonarQube Report for ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: """<p>Hello,</p>
+                     <p>Your code was analyzed successfully by SonarQube.</p>
+                     <p><a href='http://localhost:9000/dashboard?id=${env.JOB_NAME}'>Click to see SonarQube results</a></p>
+                     <p>Check Trivy Report (if applicable): <a href='${env.BUILD_URL}Trivy%20Vulnerability%20Report/'>Click Here</a></p>
+                     <p>Thanks,<br/>Jenkins</p>""",
+            mimeType: 'text/html'
+                      )
+                  }
+         }
+
         failure {
             echo 'Hello! Pipeline failed, but you tried your best! 😊'
         }
