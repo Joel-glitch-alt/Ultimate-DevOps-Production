@@ -110,22 +110,7 @@ pipeline {
             echo "Check your SonarQube dashboard at: http://localhost:9000/"
             archiveArtifacts artifacts: 'trivy-report/report.html', fingerprint: true, allowEmptyArchive: true
         }
-        // success {
-        //     echo 'Hello! Pipeline succeeded! 🎉'
-        //     script {
-        //         if (fileExists('trivy-report/report.html')) {
-        //             publishHTML(target: [
-        //                 reportDir: 'trivy-report',
-        //                 reportFiles: 'report.html',
-        //                 reportName: 'Trivy Vulnerability Report',
-        //                 keepAll: true,
-        //                 alwaysLinkToLastBuild: true
-        //             ])
-        //         } else {
-        //             echo "⚠️ Trivy HTML report not found, skipping publish."
-        //         }
-        //     }
-        // }
+       
         success {
                 echo '✅ Pipeline succeeded! 🎉'
 
